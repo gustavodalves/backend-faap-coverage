@@ -8,10 +8,10 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
     if(scheme.toLowerCase() != 'bearer') {
         return res.status(500).send({
             message: 'token malformmated'
-        })
+        });
     }
 
-    const tokenDecoded = decodeToken(token)
+    const tokenDecoded = decodeToken(token);
 
     if(tokenDecoded) {
         next();
@@ -19,6 +19,6 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
 
     return res.status(401).send({
         message: 'invalid token'
-    })
+    });
 
 }

@@ -7,5 +7,5 @@ export const {
     PG_DATABASE: pgDatabase,
     PG_USERNAME: pgUsername,
     PG_PASSWORD: pgPassword,
-    PG_PORT: pgport,
-} = process.env
+    PG_PORT: pgPort,
+} = process.env;
