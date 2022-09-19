@@ -3,8 +3,9 @@ import { Request, Response } from 'express';
 import { AppDataSource } from '../../database/data_source';
 import error from '../../utils/error';
 import httpStatus from '../../utils/httpStatus';
-import { generateToken } from '../../utils/token';
+import { generateToken, decodeToken } from '../../utils/token';
 import User from '../models/User';
+import bcrypt from 'bcryptjs';
 
 const repository = AppDataSource.getRepository(User);
 class UserController {
@@ -18,7 +19,7 @@ class UserController {
         });
 
         if(!email || !password) {
-            return res.status(500);
+            return res.status(httpStatus.internalServerError);
         }
 
         if(userExists) {
@@ -54,10 +55,10 @@ class UserController {
         });
 
         if(!user) {
-            return error(res, 404, 'User not found');
+            return error(res, httpStatus.notFound, 'User not found');
         }
 
-        return res.status(200).send(user);
+        return res.status(httpStatus.ok).send(user);
     }
 
     async update(req: Request, res: Response) {
@@ -77,7 +78,53 @@ class UserController {
             email,
         });
 
-        return res.status(200).send(userEdited);
+        return res.status(httpStatus.ok).send(userEdited);
+    }
+
+    async forgotPassword(req: Request, res: Response) {
+        const { email } = req.body;
+
+        const userExists = await repository.findOne({
+            where: {
+                email
+            }
+        });
+
+        if(!userExists) {
+            return error(res, httpStatus.notFound, 'User not found');
+        }
+
+        const token = generateToken({
+            email,
+        }, '1h');
+
+        return res.status(httpStatus.ok).send({
+            token
+        });
+    }
+
+    async resetPassword(req: Request, res: Response) {
+        const { token } = req.params;
+        const { password } = req.body;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { email } = decodeToken<any>(token);
+
+        if(!email)
+            return error(res, httpStatus.internalServerError, 'invalid token');
+
+        const user = await repository.findOneBy({
+            email,
+        });
+
+        const userPasswordEdited = await repository.save({
+            ...user,
+            password: bcrypt.hashSync(password),
+        });
+
+        return res.status(httpStatus.ok).send({
+            ...userPasswordEdited,
+            password: undefined,
+        });
     }
 }
 

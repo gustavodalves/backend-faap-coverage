@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 
 import { AppDataSource } from '../../database/data_source';
 import User from '../models/User';
-import { decodeToken, generateToken } from '../../utils/token';
+import { generateToken } from '../../utils/token';
 import error from '../../utils/error';
 import httpStatus from '../../utils/httpStatus';
 
@@ -35,52 +35,6 @@ class AuthController {
             ...user,
             password: undefined,
             token
-        });
-    }
-
-    async forgotPassword(req: Request, res: Response) {
-        const { email } = req.body;
-
-        const userExists = await repository.findOne({
-            where: {
-                email
-            }
-        });
-
-        if(!userExists) {
-            return error(res, httpStatus.notFound, 'User not found');
-        }
-
-        const token = generateToken({
-            email,
-        }, '1h');
-
-        return res.status(httpStatus.ok).send({
-            token
-        });
-    }
-
-    async resetPassword(req: Request, res: Response) {
-        const { token } = req.params;
-        const { password } = req.body;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { email } = decodeToken<any>(token);
-
-        if(!email)
-            return error(res, 500, 'invalid token');
-
-        const user = await repository.findOneBy({
-            email,
-        });
-
-        const userPasswordEdited = await repository.save({
-            ...user,
-            password: bcrypt.hashSync(password),
-        });
-
-        return res.status(200).send({
-            ...userPasswordEdited,
-            password: undefined,
         });
     }
 }

@@ -34,8 +34,6 @@
       "start": "ts-node src/index.ts",
       "dev": "nodemon src/index.ts",
       "build": "rimraf ./dist && tsc",
-      "typeorm": "typeorm-ts-node-commonjs -d ./src/database/data_source.ts",
-      "migration:create": "typeorm migration:create src/database/migrations/CreateRefreshTokensTable",
-      "migration:run": "typeorm migration:run"
+      "typeorm": "typeorm-ts-node-commonjs -d ./src/database/data_source.ts"
    }
 }
