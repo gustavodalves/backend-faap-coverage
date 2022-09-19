@@ -110,6 +110,9 @@ class UserController {
         if(!email)
             return error(res, httpStatus.internalServerError, 'invalid token');
 
+        if(!password)
+            return error(res, httpStatus.badRequest, 'password not provided');
+
         const user = await repository.findOneBy({
             email,
         });

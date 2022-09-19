@@ -3,9 +3,8 @@ import { Request, Response, NextFunction } from 'express';
 import error from '../../utils/error';
 import { decodeToken } from '../../utils/token';
 import httpStatus from '../../utils/httpStatus';
-import UserJwtPayload from '../../interfaces/UserJwtPayload';
 
-export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
+async function authMiddleware(req: Request, res: Response, next: NextFunction) {
     const { authorization } = req.headers;
 
     if(!authorization) {
@@ -14,7 +13,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
 
     const [ scheme, token ] = authorization.split(' ');
 
-    if(scheme.toLowerCase() != 'bearer') {
+    if(scheme.toLowerCase() !== 'bearer') {
         return error(res, httpStatus.badRequest, 'token mal formatted');
     }
 
@@ -27,3 +26,5 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
 
     return error(res, httpStatus.unauthorized, 'invalid token');
 }
+
+export default authMiddleware;
