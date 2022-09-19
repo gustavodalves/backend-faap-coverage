@@ -62,7 +62,7 @@ class UserController {
 
     async update(req: Request, res: Response) {
         const { id } = req.params;
-        const { email, password } = req.body;
+        const { email } = req.body;
 
         const user = await repository.findOneBy({
             id,
@@ -74,7 +74,6 @@ class UserController {
 
         const userEdited = await repository.save({
             ...user,
-            password,
             email,
         });
 
