@@ -65,7 +65,7 @@ class UserController {
         const { email, password } = req.body;
 
         const user = await repository.findOneBy({
-            email,
+            id,
         });
 
         if(!user) {
