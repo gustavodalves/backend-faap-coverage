@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { AppDataSource } from '../../database/data_source';
 import error from '../../utils/error';
 import httpStatus from '../../utils/httpStatus';
-import { generateToken, decodeToken } from '../../utils/token';
+import { generateToken, decodeToken, expiresToken } from '../../utils/token';
 import User from '../models/User';
 import bcrypt from 'bcryptjs';
 
@@ -29,11 +29,11 @@ class UserController {
         const user = repository.create({ email, password });
         const token = generateToken({
             id: user.id,
-        });
+        }, 'authenticate');
 
         await repository.save(user);
 
-        return res.status(httpStatus.ok).send({
+        return res.status(httpStatus.created).send({
             ...user,
             password: undefined,
             token
@@ -84,19 +84,17 @@ class UserController {
     async forgotPassword(req: Request, res: Response) {
         const { email } = req.body;
 
-        const userExists = await repository.findOne({
-            where: {
-                email
-            }
+        const userExists = await repository.findOneBy({
+            email
         });
 
         if(!userExists) {
             return error(res, httpStatus.notFound, 'User not found');
         }
 
-        const token = generateToken({
+        const token = await generateToken({
             email,
-        }, '1h');
+        }, 'reset_password', '1h');
 
         return res.status(httpStatus.ok).send({
             token
@@ -107,7 +105,7 @@ class UserController {
         const { token } = req.params;
         const { password } = req.body;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { email } = decodeToken<any>(token);
+        const { email } = await decodeToken<any>(token);
 
         if(!email)
             return error(res, httpStatus.internalServerError, 'invalid token');
@@ -120,6 +118,12 @@ class UserController {
             ...user,
             password: bcrypt.hashSync(password),
         });
+
+        const tokenIsExpired = await expiresToken(token);
+
+        if(!tokenIsExpired) {
+            console.error(`Token: ${token} is not expired`);
+        }
 
         return res.status(httpStatus.ok).send({
             ...userPasswordEdited,
