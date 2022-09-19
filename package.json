@@ -22,6 +22,7 @@
    "dependencies": {
       "bcryptjs": "^2.4.3",
       "body-parser": "^1.20.0",
+      "crypto": "^1.0.1",
       "dotenv": "^16.0.2",
       "express": "^4.18.1",
       "jsonwebtoken": "^8.5.1",
@@ -31,9 +32,10 @@
    },
    "scripts": {
       "start": "ts-node src/index.ts",
+      "dev": "nodemon src/index.ts",
+      "build": "rimraf ./dist && tsc",
       "typeorm": "typeorm-ts-node-commonjs -d ./src/database/data_source.ts",
-      "migration:create": "typeorm migration:create src/database/migrations/CreateUsersTables",
-      "migration:run": "typeorm migration:run",
-      "dev": "nodemon src/index.ts"
+      "migration:create": "typeorm migration:create src/database/migrations/CreateRefreshTokensTable",
+      "migration:run": "typeorm migration:run"
    }
 }

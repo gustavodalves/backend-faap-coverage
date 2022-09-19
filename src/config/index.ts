@@ -1,5 +1,9 @@
 import 'dotenv/config';
 
+interface ProcessEnv {
+    [key: string]: string | undefined
+}
+
 export const {
     PORT: port,
     JWT_SECRET: jwtSecret,
@@ -8,4 +12,4 @@ export const {
     PG_USERNAME: pgUsername,
     PG_PASSWORD: pgPassword,
     PG_PORT: pgPort,
-} = process.env;
+}: ProcessEnv = process.env;

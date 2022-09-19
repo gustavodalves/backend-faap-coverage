@@ -1,17 +1,17 @@
 import jwt from 'jsonwebtoken';
 import { jwtSecret } from '../config';
 
-const EXPIRES_TOKEN_TIME = '1d';
+const EXPIRES_TOKEN_TIME: string | number = '1d';
 
-export function generateToken(payload = {}) {
+export function generateToken(payload = {}, expiresIn: string | number = EXPIRES_TOKEN_TIME) {
     return jwt.sign(payload, jwtSecret!, {
-        expiresIn: EXPIRES_TOKEN_TIME,
+        expiresIn,
     });
 }
 
-export function decodeToken(token: string) {
+export function decodeToken<T>(token: string) {
     try {
-        return jwt.decode(token);
+        return jwt.verify(token, jwtSecret!) as T;
     } catch {
         return false;
     }
