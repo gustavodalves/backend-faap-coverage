@@ -18,20 +18,20 @@ class AuthController {
             .getOne();
 
         if(!user) {
-            return error(res, 404, 'User not found');
+            return error(res, httpStatus.notFound, 'User not found');
         }
 
         const isValidPassword = await bcrypt.compare(password, user.password);
 
         if(!isValidPassword) {
-            return error(res, 401, 'Passowrd is invalid');
+            return error(res, httpStatus.unauthorized, 'Passowrd is invalid');
         }
 
         const token = generateToken({
             id: user.id
         });
 
-        return res.status(200).send({
+        return res.status(httpStatus.ok).send({
             ...user,
             password: undefined,
             token

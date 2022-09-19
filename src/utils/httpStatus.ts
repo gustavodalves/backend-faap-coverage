@@ -13,6 +13,7 @@ const httpStatus: IHttpStatus = {
     forbidden: 403,
     notFound: 404,
     notAcceptable: 406,
+    conflict: 409,
     internalServerError: 500,
     badGateway: 502,
 };

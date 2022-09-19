@@ -23,7 +23,7 @@ class UserController {
         }
 
         if(userExists) {
-            return res.sendStatus(409);
+            return res.sendStatus(httpStatus.conflict);
         }
 
         const user = repository.create({ email, password });
