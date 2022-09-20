@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import bcrypt from 'bcryptjs';
 import Token from './Token';
+import { IsEmail, MinLength} from 'class-validator';
 
 @Entity('users')
 class User {
@@ -8,9 +9,11 @@ class User {
         id: string;
 
     @Column()
+    @IsEmail()
         email: string;
 
     @Column({ select: false })
+    @MinLength(8, { message: 'Password must contain at least 8 characters' })
         password: string;
 
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })

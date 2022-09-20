@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { validate, ValidationError } from 'class-validator';
 
 import { AppDataSource } from '../../database/data_source';
 import error from '../../utils/error';
@@ -7,29 +8,32 @@ import { generateToken, decodeToken, expiresToken } from '../../utils/token';
 import User from '../models/User';
 import bcrypt from 'bcryptjs';
 import ForgotPasswordJwtPayload from '../../interfaces/ForgotPasswordJwtPayload';
+import errorsMessage from '../../utils/validateErrors';
 
 const repository = AppDataSource.getRepository(User);
 class UserController {
     async store(req: Request, res: Response) {
         const { email, password } = req.body;
 
-        const userExists = await repository.findOne({
-            where: {
-                email
-            }
+        const userExists = await repository.findOneBy({
+            email
         });
-
-        if(!email || !password) {
-            return res.status(httpStatus.internalServerError);
-        }
 
         if(userExists) {
             return res.sendStatus(httpStatus.conflict);
         }
 
+        if(!email || !password) {
+            return res.status(httpStatus.internalServerError);
+        }
         const user = repository.create({ email, password });
-        const userCreated = await repository.save(user);
+        const errors: ValidationError[] = await validate(user);
 
+        if(errors.length > 0) {
+            return error(res, httpStatus.badRequest, errorsMessage(errors));
+        }
+
+        const userCreated = await repository.save(user);
         const token = await generateToken({
             id: user.id,
         }, userCreated,  'authenticate');
@@ -66,11 +70,16 @@ class UserController {
         const { id } = req.params;
         const { email } = req.body;
 
-        const user = await repository.findOneBy({
-            id,
-        });
+        const user = await repository.createQueryBuilder('user')
+            .addSelect('user.password')
+            .where('user.id = :id', { id })
+            .getOne();
 
-        if(!user) {
+        const errors = await validate(user!);
+
+        if(errors.length > 0) {
+            return error(res, httpStatus.badRequest, errorsMessage(errors));
+        } else if(!user) {
             return error(res, httpStatus.notFound, 'User not found');
         }
 
@@ -85,21 +94,23 @@ class UserController {
     async forgotPassword(req: Request, res: Response) {
         const { email } = req.body;
 
-        const user = await repository.findOneBy({
-            email
-        });
+        try {
+            const user = await repository.findOne({
+                where: {
+                    email
+                }
+            });
+            const token = await generateToken({
+                email,
+            }, user!, 'reset_password', '1h');
 
-        if(!user) {
+            return res.status(httpStatus.ok).send({
+                token
+            });
+        } catch {
             return error(res, httpStatus.notFound, 'User not found');
         }
 
-        const token = await generateToken({
-            email,
-        }, user, 'reset_password', '1h');
-
-        return res.status(httpStatus.ok).send({
-            token
-        });
     }
 
     async resetPassword(req: Request, res: Response) {
@@ -120,6 +131,19 @@ class UserController {
         const user = await repository.findOneBy({
             email,
         });
+
+        if(!user) {
+            return error(res, httpStatus.notFound, 'User not found');
+        }
+
+        const errors = await validate({
+            ...user,
+            password,
+        });
+
+        if(errors.length > 0) {
+            return error(res, httpStatus.badRequest, errorsMessage(errors));
+        }
 
         const userPasswordEdited = await repository.save({
             ...user,
