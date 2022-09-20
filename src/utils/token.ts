@@ -31,7 +31,7 @@ export async function generateToken(
     return token;
 }
 
-export async function decodeToken<T>(token: string): Promise<T | false>  {
+export async function decodeToken<T>(token: string): Promise<T | false> {
     try {
         const userToken = await repository.findOneBy({
             token
@@ -47,7 +47,7 @@ export async function decodeToken<T>(token: string): Promise<T | false>  {
     }
 }
 
-export async function expiresToken(token: string): Promise<Token | false>  {
+export async function expiresToken(token: string): Promise<boolean> {
     const userToken = await repository.findOneBy({
         token
     });
@@ -56,8 +56,10 @@ export async function expiresToken(token: string): Promise<Token | false>  {
         return false;
     }
 
-    return await repository.save({
+    const tokenIsExpired = await repository.save({
         ...userToken,
         isExpire: true,
     });
+
+    return !!tokenIsExpired;
 }

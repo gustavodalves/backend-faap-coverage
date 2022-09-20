@@ -126,8 +126,7 @@ class UserController {
             password: bcrypt.hashSync(password),
         });
 
-        const tokenIsExpired = await expiresToken(token);
-        if(!tokenIsExpired) {
+        if(!await expiresToken(token)) {
             console.error(`Token: ${token} is not expired`);
         }
 
