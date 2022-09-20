@@ -26,8 +26,22 @@ export class CreateTokensTable1663613594851 implements MigrationInterface {
                 {
                     name: 'is_expire',
                     type: 'boolean'
-                }
+                },
+                {
+                    name: 'userId',
+                    type: 'uuid'
+                },
             ],
+            foreignKeys: [
+                {
+                    name: 'userId',
+                    referencedTableName: 'users',
+                    referencedColumnNames: ['id'],
+                    columnNames: ['userId'],
+                    onDelete: 'CASCADE',
+                    onUpdate: 'CASCADE'
+                }
+            ]
         }));
     }
 

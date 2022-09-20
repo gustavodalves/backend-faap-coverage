@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import User from './User';
 
 @Entity('tokens')
 class Token {
@@ -14,6 +15,11 @@ class Token {
     @Column()
         is_expire: boolean;
 
+    @Column()
+        userId: string;
+
+    @ManyToOne(type => User, token => Token)
+        user: User;
 }
 
 export default Token;

@@ -30,7 +30,7 @@ class AuthController {
 
         const token = await generateToken({
             id: user.id
-        }, 'authenticate');
+        }, user, 'authenticate');
 
         return res.status(httpStatus.ok).send({
             ...user,

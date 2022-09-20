@@ -27,11 +27,11 @@ class UserController {
         }
 
         const user = repository.create({ email, password });
-        const token = generateToken({
-            id: user.id,
-        }, 'authenticate');
+        const userCreated = await repository.save(user);
 
-        await repository.save(user);
+        const token = await generateToken({
+            id: user.id,
+        }, userCreated,  'authenticate');
 
         return res.status(httpStatus.created).send({
             ...user,
@@ -84,17 +84,17 @@ class UserController {
     async forgotPassword(req: Request, res: Response) {
         const { email } = req.body;
 
-        const userExists = await repository.findOneBy({
+        const user = await repository.findOneBy({
             email
         });
 
-        if(!userExists) {
+        if(!user) {
             return error(res, httpStatus.notFound, 'User not found');
         }
 
         const token = await generateToken({
             email,
-        }, 'reset_password', '1h');
+        }, user, 'reset_password', '1h');
 
         return res.status(httpStatus.ok).send({
             token
