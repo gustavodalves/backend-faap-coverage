@@ -9,8 +9,8 @@ app.use(express.json());
 app.use(router);
 
 app.listen(port, () => {
-    console.log(`Server is running at localhost:${port}`);
+    console.log(`Server is running at localhost:${port} 🔥`);
     AppDataSource.initialize().then(() => {
-        console.log('Database is connected');
+        console.log('Database is connected 📦');
     }).catch(error => console.log(error));
 });

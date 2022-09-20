@@ -28,8 +28,18 @@ export class CreateTokensTable1663613594851 implements MigrationInterface {
                     type: 'boolean'
                 },
                 {
-                    name: 'userId',
+                    name: 'user_id',
                     type: 'uuid'
+                },
+                {
+                    name: 'created_at',
+                    type: 'timestamp',
+                    default: 'NOW()'
+                },
+                {
+                    name: 'updated_at',
+                    type: 'timestamp',
+                    default: 'NOW()'
                 },
             ],
             foreignKeys: [
@@ -37,7 +47,7 @@ export class CreateTokensTable1663613594851 implements MigrationInterface {
                     name: 'userId',
                     referencedTableName: 'users',
                     referencedColumnNames: ['id'],
-                    columnNames: ['userId'],
+                    columnNames: ['user_id'],
                     onDelete: 'CASCADE',
                     onUpdate: 'CASCADE'
                 }

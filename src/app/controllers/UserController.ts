@@ -6,6 +6,7 @@ import httpStatus from '../../utils/httpStatus';
 import { generateToken, decodeToken, expiresToken } from '../../utils/token';
 import User from '../models/User';
 import bcrypt from 'bcryptjs';
+import ForgotPasswordJwtPayload from '../../interfaces/ForgotPasswordJwtPayload';
 
 const repository = AppDataSource.getRepository(User);
 class UserController {
@@ -104,11 +105,14 @@ class UserController {
     async resetPassword(req: Request, res: Response) {
         const { token } = req.params;
         const { password } = req.body;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { email } = await decodeToken<any>(token);
 
-        if(!email)
+        const tokenDecoded = await decodeToken<ForgotPasswordJwtPayload>(token);
+
+        if(!tokenDecoded || !tokenDecoded.email) {
             return error(res, httpStatus.internalServerError, 'invalid token');
+        }
+
+        const { email } = tokenDecoded;
 
         if(!password)
             return error(res, httpStatus.badRequest, 'password not provided');
@@ -123,7 +127,6 @@ class UserController {
         });
 
         const tokenIsExpired = await expiresToken(token);
-
         if(!tokenIsExpired) {
             console.error(`Token: ${token} is not expired`);
         }

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import User from './User';
 
 @Entity('tokens')
@@ -12,13 +12,17 @@ class Token {
     @Column()
         token: string;
 
-    @Column()
-        is_expire: boolean;
+    @Column({ name: 'is_expire' })
+        isExpire: boolean;
 
-    @Column()
-        userId: string;
+    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
+        created_at: Date;
 
-    @ManyToOne(type => User, token => Token)
+    @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
+        updated_at: Date;
+
+    @ManyToOne(() => User, () => Token)
+    @JoinColumn({ name: 'user_id' })
         user: User;
 }
 
