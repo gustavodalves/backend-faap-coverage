@@ -14,6 +14,7 @@ const httpStatus: IHttpStatus = {
     notFound: 404,
     notAcceptable: 406,
     conflict: 409,
+    unprocessableEntity: 422,
     internalServerError: 500,
     badGateway: 502,
 };

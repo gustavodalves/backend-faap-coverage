@@ -1,6 +1,6 @@
-interface IValidate {
+interface Validate {
     property: string;
     messages: string[];
 }
 
-export default IValidate;
+export default Validate;

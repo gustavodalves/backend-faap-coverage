@@ -1,13 +1,11 @@
 import jwt from 'jsonwebtoken';
-import Token from '../app/models/Token';
+
 import User from '../app/models/User';
 import { jwtSecret } from '../config';
-import { AppDataSource } from '../database/data_source';
+import tokenRepository from '../repositories/tokenRepository';
 
 const EXPIRES_TOKEN_TIME: string | number = '1d';
 const JWT_SECRET = jwtSecret ?? '';
-
-const repository = AppDataSource.getRepository(Token);
 
 export async function generateToken(
     payload = {},
@@ -19,21 +17,21 @@ export async function generateToken(
         expiresIn,
     });
 
-    const tokenRepository = repository.create({
+    const tokenCreated = tokenRepository.create({
         type,
         token,
         isExpire: false,
         user,
     });
 
-    await repository.save(tokenRepository);
+    await tokenRepository.save(tokenCreated);
 
     return token;
 }
 
 export async function decodeToken<T>(token: string): Promise<T | false> {
     try {
-        const userToken = await repository.findOneBy({
+        const userToken = await tokenRepository.findOneBy({
             token
         });
 
@@ -48,7 +46,7 @@ export async function decodeToken<T>(token: string): Promise<T | false> {
 }
 
 export async function expiresToken(token: string): Promise<boolean> {
-    const userToken = await repository.findOneBy({
+    const userToken = await tokenRepository.findOneBy({
         token
     });
 
@@ -56,7 +54,7 @@ export async function expiresToken(token: string): Promise<boolean> {
         return false;
     }
 
-    const tokenIsExpired = await repository.save({
+    const tokenIsExpired = await tokenRepository.save({
         ...userToken,
         isExpire: true,
     });

@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 import bcrypt from 'bcryptjs';
 import Token from './Token';
-import { IsEmail, MinLength} from 'class-validator';
+import { IsEmail, Matches } from 'class-validator';
+import patterns from '../../utils/patterns';
 
 @Entity('users')
 class User {
@@ -9,11 +10,14 @@ class User {
         id: string;
 
     @Column()
+        name: string;
+
+    @Column()
     @IsEmail()
         email: string;
 
     @Column({ select: false })
-    @MinLength(8, { message: 'Password must contain at least 8 characters' })
+    @Matches(patterns.password, { message: 'Password must contain at least 1 capital letter, 1 number and 1 special character' })
         password: string;
 
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
@@ -29,6 +33,7 @@ class User {
     }
 
     @OneToMany(() => Token, () => Token)
+    @JoinColumn()
         tokens: Token[];
 }
 

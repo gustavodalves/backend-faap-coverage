@@ -4,8 +4,8 @@ import bcrypt from 'bcryptjs';
 import { AppDataSource } from '../../database/data_source';
 import User from '../models/User';
 import { expiresToken, generateToken } from '../../utils/token';
-import error from '../../utils/error';
 import httpStatus from '../../utils/httpStatus';
+import { BadRequestError, NotFoundError, UnauthorizedError } from '../../helpers/ApiError';
 
 const repository = AppDataSource.getRepository(User);
 
@@ -19,13 +19,13 @@ class AuthController {
             .getOne();
 
         if(!user) {
-            return error(res, httpStatus.notFound, 'User not found');
+            throw new NotFoundError('User not found');
         }
 
         const isValidPassword = await bcrypt.compare(password, user.password);
 
         if(!isValidPassword) {
-            return error(res, httpStatus.unauthorized, 'Password is invalid');
+            throw new UnauthorizedError('Invalid Password');
         }
 
         const token = await generateToken({
@@ -43,20 +43,20 @@ class AuthController {
         const { authorization } = req.headers;
 
         if(!authorization) {
-            return error(res, httpStatus.badRequest, 'token not provided');
+            throw new BadRequestError('Token is not provided');
         }
 
         const [ scheme, token ] = authorization.split(' ');
 
         if(scheme.toLowerCase() != 'bearer') {
-            return error(res, httpStatus.badRequest, 'token mal formatted');
+            throw new BadRequestError('Token mal formmated');
         }
 
-        if(await expiresToken(token)) {
-            return res.sendStatus(httpStatus.ok);
+        if(!await expiresToken(token)) {
+            throw new BadRequestError('Invalid token');
         }
 
-        return error(res, httpStatus.badRequest, 'Token is not exists');
+        return res.sendStatus(httpStatus.ok);
     }
 }
 
