@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 interface ProcessEnv {
-    [key: string]: string | undefined
+    [key: string]: string | undefined;
 }
 
 export const {

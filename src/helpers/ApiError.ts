@@ -57,3 +57,9 @@ export class BadGatewayError extends ApiError {
         super(message, httpStatus.badGateway);
     }
 }
+
+export class InternalServerError extends ApiError {
+    constructor(message: string | IValidate[]) {
+        super(message, httpStatus.internalServerError);
+    }
+}

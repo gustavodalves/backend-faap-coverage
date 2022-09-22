@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { validate, ValidationError } from 'class-validator';
 import bcrypt from 'bcryptjs';
 
-import { generateToken, decodeToken, expiresToken } from '../../utils/token';
+import TokenService from '../services/TokenService';
 import { BadRequestError, NotFoundError } from '../../helpers/ApiError';
 
 import httpStatus from '../../utils/httpStatus';
@@ -11,7 +11,7 @@ import errorsMessage from '../../utils/validateErrors';
 import userRepository from '../../repositories/userRepository';
 
 class UserController {
-    async store(req: Request, res: Response) {
+    public async store(req: Request, res: Response) {
         const { email, password, name } = req.body;
 
         const userExists = await userRepository.findOneBy({
@@ -30,7 +30,7 @@ class UserController {
         }
 
         const userCreated = await userRepository.save(user);
-        const token = await generateToken({
+        const token = await TokenService.generateToken({
             id: user.id,
         }, userCreated,  'authenticate');
 
@@ -41,12 +41,12 @@ class UserController {
         });
     }
 
-    async index(req: Request, res: Response) {
+    public async index(req: Request, res: Response) {
         const allUsers = await userRepository.find();
         return res.status(httpStatus.ok).send(allUsers);
     }
 
-    async show(req: Request, res: Response) {
+    public async show(req: Request, res: Response) {
         const { id } = req.params;
 
         const user = await userRepository.findOne({
@@ -62,14 +62,11 @@ class UserController {
         return res.status(httpStatus.ok).send(user);
     }
 
-    async update(req: Request, res: Response) {
+    public async update(req: Request, res: Response) {
         const { id } = req.params;
         const { email, name } = req.body;
 
-        const user = await userRepository.createQueryBuilder('user')
-            .addSelect('user.password')
-            .where('user.id = :id', { id })
-            .getOne();
+        const user = await userRepository.findByEmailAndSelectPassword(email);
 
         if(!user) {
             throw new NotFoundError('User not found');
@@ -90,7 +87,7 @@ class UserController {
         return res.status(httpStatus.ok).send(userEdited);
     }
 
-    async forgotPassword(req: Request, res: Response) {
+    public async forgotPassword(req: Request, res: Response) {
         const { email } = req.body;
 
         const user = await userRepository.findOne({
@@ -103,7 +100,7 @@ class UserController {
             throw new NotFoundError('User not found');
         }
 
-        const token = await generateToken({
+        const token = await TokenService.generateToken({
             email,
         }, user, 'reset_password', '1h');
 
@@ -112,11 +109,11 @@ class UserController {
         });
     }
 
-    async resetPassword(req: Request, res: Response) {
+    public async resetPassword(req: Request, res: Response) {
         const { token } = req.params;
         const { password } = req.body;
 
-        const tokenDecoded = await decodeToken<IForgotPasswordJwtPayload>(token);
+        const tokenDecoded = await TokenService.decodeToken<IForgotPasswordJwtPayload>(token);
 
         if(!tokenDecoded || !tokenDecoded.email) {
             throw new NotFoundError('email not found');
@@ -149,7 +146,7 @@ class UserController {
             password: bcrypt.hashSync(password),
         });
 
-        if(!await expiresToken(token)) {
+        if(!await TokenService.expiresToken(token)) {
             console.error(`Token: ${token} is not expired`);
         }
 

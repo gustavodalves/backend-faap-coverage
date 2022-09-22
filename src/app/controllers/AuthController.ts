@@ -1,22 +1,16 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 
-import { AppDataSource } from '../../database/data_source';
-import User from '../models/User';
-import { expiresToken, generateToken } from '../../utils/token';
+import TokenService from '../services/TokenService';
 import httpStatus from '../../utils/httpStatus';
 import { BadRequestError, NotFoundError, UnauthorizedError } from '../../helpers/ApiError';
-
-const repository = AppDataSource.getRepository(User);
+import userRepository from '../../repositories/userRepository';
 
 class AuthController {
-    async authenticate(req: Request, res: Response) {
+    public async authenticate(req: Request, res: Response) {
         const { email, password } = req.body;
 
-        const user = await repository.createQueryBuilder('user')
-            .addSelect('user.password')
-            .where('user.email = :email', { email })
-            .getOne();
+        const user = await userRepository.findByEmailAndSelectPassword(email);
 
         if(!user) {
             throw new NotFoundError('User not found');
@@ -28,7 +22,7 @@ class AuthController {
             throw new UnauthorizedError('Invalid Password');
         }
 
-        const token = await generateToken({
+        const token = await TokenService.generateToken({
             id: user.id
         }, user, 'authenticate');
 
@@ -39,7 +33,7 @@ class AuthController {
         });
     }
 
-    async logout(req: Request, res: Response) {
+    public async logout(req: Request, res: Response) {
         const { authorization } = req.headers;
 
         if(!authorization) {
@@ -52,11 +46,19 @@ class AuthController {
             throw new BadRequestError('Token mal formmated');
         }
 
-        if(!await expiresToken(token)) {
+        if(!await TokenService.expiresToken(token)) {
             throw new BadRequestError('Invalid token');
         }
 
-        return res.sendStatus(httpStatus.ok);
+        return res.status(httpStatus.ok).send({
+            message: 'Token is expired'
+        });
+    }
+
+    public isValidToken(req: Request, res: Response) {
+        return res.status(httpStatus.ok).send({
+            message: 'Token is valid'
+        });
     }
 }
 

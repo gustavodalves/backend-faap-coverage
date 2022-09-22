@@ -1,8 +1,8 @@
 import 'express-async-errors';
 import express, { Express } from 'express';
 
-import { errorMiddleware } from './app/middlewares/errorMiddleware';
-import { port } from './config';
+import errorMiddleware from './app/middlewares/errorMiddleware';
+import { port } from './env/config';
 import { AppDataSource } from './database/data_source';
 import router from './router';
 
