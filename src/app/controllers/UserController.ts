@@ -14,6 +14,10 @@ class UserController {
     public async store(req: Request, res: Response) {
         const { email, password, name } = req.body;
 
+        if(!email || !password || !name) {
+            throw new BadRequestError('Data not provided');
+        }
+
         const userExists = await userRepository.findOneBy({
             email
         });
