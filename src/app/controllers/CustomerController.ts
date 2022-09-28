@@ -28,6 +28,7 @@ class CustomerController {
     }
 
     public async index(req: Request, res: Response) {
+        console.log(11)
         const allCustomerMessage = await customerRepository.find();
         return res.status(httpStatus.ok).send(allCustomerMessage);
     }
