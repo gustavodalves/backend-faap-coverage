@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 import { validate, ValidationError } from 'class-validator';
-import { BadRequestError, NotFoundError } from '../../helpers/ApiError';
+import { BadRequestError } from '../../helpers/ApiError';
 
 import errorsMessage from '../../utils/validateErrors';
 import customerRepository from '../../repositories/customerRepository';
@@ -28,7 +28,6 @@ class CustomerController {
     }
 
     public async index(req: Request, res: Response) {
-        console.log(11)
         const allCustomerMessage = await customerRepository.find();
         return res.status(httpStatus.ok).send(allCustomerMessage);
     }

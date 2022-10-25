@@ -4,14 +4,14 @@ import httpStatus from '../../utils/httpStatus';
 import BotService from '../services/BotService';
 
 class BotController {
-    chat(req: Request, res: Response) {
+    async chat(req: Request, res: Response) {
         const { botMessage }: { botMessage: number[]} = req.body;
 
         if (!botMessage) {
             throw new BadRequestError('bot data not provided');
         }
 
-        const message = BotService.validate(botMessage);
+        const message = await BotService.validate(botMessage);
 
 
         res.status(httpStatus.ok).send({ message });
