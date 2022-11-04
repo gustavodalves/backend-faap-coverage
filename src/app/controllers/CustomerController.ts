@@ -9,9 +9,9 @@ import httpStatus from '../../utils/httpStatus';
 
 class CustomerController {
     public async store(req: Request, res: Response) {
-        const { email, name, subject, message } = req.body;
+        const { email, name, subject, message, product } = req.body;
 
-        const customer = customerRepository.create({ email, name, subject, message });
+        const customer = customerRepository.create({ email, name, subject, message,product });
         const errors: ValidationError[] = await validate(customer);
 
         if(errors.length > 0) {

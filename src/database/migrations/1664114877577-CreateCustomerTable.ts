@@ -29,6 +29,10 @@ export class CreateCustomerTable1664114877577 implements MigrationInterface {
                         type: 'varchar'
                     },
                     {
+                        name: 'product',
+                        type: 'varchar'
+                    },
+                    {
                         name: 'message',
                         type: 'varchar'
                     },

@@ -36,7 +36,35 @@ class BotService {
                     message: 'Digite 2 para conhecer o seguro casa',
                 },
                 {
-                    id: 2,
+                    id: 3,
+                    message: 'Digite 3 para conhecer o seguro saúde pet'
+                },
+                {
+                    id: 4,
+                    message: 'Digite 4 para conhecer o seguro viagem'
+                },
+                {
+                    id: 5,
+                    message: 'Digite 5 para conhecer o seguro transporte'
+                },
+                {
+                    id: 6,
+                    message: 'Digite 6 para conhecer o seguro celular'
+                },
+                {
+                    id: 7,
+                    message: 'Digite 7 para conhecer o seguro empresa'
+                },
+                {
+                    id: 8,
+                    message: 'Digite 8 para conhecer o seguro saúde'
+                },
+                {
+                    id: 9,
+                    message: 'Digite 9 para conhecer o seguro fiança'
+                },
+                {
+                    id: 3,
                     message: 'Digite qualquer tecla para encerrar nossa conversa'
                 }],
                 message: 'Escolha um produto'
@@ -47,7 +75,7 @@ class BotService {
             const option = botMessage[1];
             if(option === 1) {
                 return {
-                    message: 'Seguro Automotivo',
+                    message: 'Tranquilidade no seu dia e nas viagens. A certeza de que o inesperado não irá te perturbar. Com várias opções de coberturas como colisão, incêndio, roubo, furto, terceiros, além de assistência 24h. Nós da FAAP, faremos sua cotação procurando atender suas necessidades e o melhor custo benefício.',
                     options: [{
                         id: 0,
                         message: 'Tchau :)'
@@ -57,7 +85,77 @@ class BotService {
 
             else if(option === 2) {
                 return {
-                    message: 'Seguro Casa',
+                    message: 'A garantia de que a sua família e o seu patrimônio estarão em segurança é o nosso objetivo. Opções de seguros para sua residência com coberturas para danos elétricos, incêndio, explosão, fumaça, roubo, responsabilidade civil e outros, conforme a sua necessidade.',
+                    options: [{
+                        id: 0,
+                        message: 'Tchau :)'
+                    }]
+                };
+            }
+
+            else if(option === 3) {
+                return {
+                    message: 'Saúde, vacinas e qualidade de vida para o seu pet que merece tanto carinho, cuidado e protegendo o dono dos imprevistos. Sim, temos o melhor para oferecer, consulte-nos.',
+                    options: [{
+                        id: 0,
+                        message: 'Tchau :)'
+                    }]
+                };
+            }
+
+            else if(option === 4) {
+                return {
+                    message: 'Viagem de férias, a trabalho, malas prontas, destino dos sonhos! Porque longe de casa temos que estar mais seguros do que nunca. Garanta os imprevistos e fique tranquilo, estaremos aqui para dar todo o suporte.',
+                    options: [{
+                        id: 0,
+                        message: 'Tchau :)'
+                    }]
+                };
+            }
+
+            else if(option === 5) {
+                return {
+                    message: 'A garantia que seus produtos, durante transporte, estarão seguros são os nossos objetivos nesse caso. Transporte de carga, sem risco de perder algum valor, como extravio, são tais possibilidades a se evitar ao escolher essa opção.',
+                    options: [{
+                        id: 0,
+                        message: 'Tchau :)'
+                    }]
+                };
+            }
+
+            else if(option === 6) {
+                return {
+                    message: 'Atualmente os smartphones, notebooks, câmeras, instrumentos musicais e outros equipamentos eletrônicos são indispensáveis no nosso dia a dia, mas o risco existe e podemos minimizar. Consulte-nos, você escolhe as coberturas conforme sua necessidade.',
+                    options: [{
+                        id: 0,
+                        message: 'Tchau :)'
+                    }]
+                };
+            }
+
+            else if(option === 7) {
+                return {
+                    message: 'Proteção e Segurança para sua empresa como escritórios, lojas, comércios em geral e indústrias e seus clientes.',
+                    options: [{
+                        id: 0,
+                        message: 'Tchau :)'
+                    }]
+                };
+            }
+
+            else if(option === 8) {
+                return {
+                    message: 'Segurança, tranquilidade e proteção para você, sua família e seus funcionários. Planos individuais, por adesão ou para a sua empresa à partir de duas vidas. Administramos procurando trazer apoio e o seu melhor custo-benefício.',
+                    options: [{
+                        id: 0,
+                        message: 'Tchau :)'
+                    }]
+                };
+            }
+
+            else if(option === 9) {
+                return {
+                    message: 'Com a FAPP Seguros, o seguro fiança para alugar um imóvel ficou muito mais fácil. Você não precisa se preocupar com fiador e caução; aluga o imóvel que quiser, para sua moradia ou seu negócio, com agilidade. Fazemos toda a consultoria com garantia.',
                     options: [{
                         id: 0,
                         message: 'Tchau :)'
@@ -100,7 +198,8 @@ class BotService {
                     name: botMessage[1],
                     email: botMessage[2],
                     subject: botMessage[3],
-                    message: botMessage[4]
+                    message: botMessage[4],
+                    product: '',
                 });
 
                 const errors: ValidationError[] = await validate(customer);

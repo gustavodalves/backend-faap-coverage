@@ -17,6 +17,9 @@ class User {
         email: string;
 
     @Column()
+        product: string;
+
+    @Column()
         subject: string;
 
     @Column()
