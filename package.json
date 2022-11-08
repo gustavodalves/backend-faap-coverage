@@ -4,7 +4,7 @@
    "description": "",
    "type": "commonjs",
    "scripts": {
-      "start": "ts-node src/index.ts",
+      "start": "node dist/index.js",
       "dev": "nodemon src/index.ts",
       "build": "rimraf ./dist && tsc",
       "typeorm": "typeorm-ts-node-commonjs -d ./src/database/data_source.ts",
