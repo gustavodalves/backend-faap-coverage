@@ -4,11 +4,11 @@
    "description": "",
    "type": "commonjs",
    "scripts": {
-      "start": "node dist/index.js",
-      "dev": "nodemon src/index.ts",
-      "build": "rimraf ./dist && tsc",
-      "typeorm": "typeorm-ts-node-commonjs -d ./src/database/data_source.ts",
-      "migration:create": "typeorm migration:create src/database/migrations/CreateBotTable"
+       "dev": "nodemon src/index.ts",
+       "build": "rimraf ./dist && tsc",
+       "typeorm": "typeorm-ts-node-commonjs -d ./src/database/data_source.ts",
+       "migration:create": "typeorm migration:create src/database/migrations/CreateBotTable",
+       "start": "node dist/index.js",
    },
    "devDependencies": {
       "@types/bcryptjs": "^2.4.2",
