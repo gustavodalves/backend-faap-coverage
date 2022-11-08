@@ -4,6 +4,8 @@ interface ProcessEnv {
     [key: string]: string | undefined;
 }
 
+console.log(port);
+
 export const {
     PORT: port,
     JWT_SECRET: jwtSecret,
