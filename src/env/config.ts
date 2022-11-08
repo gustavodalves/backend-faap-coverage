@@ -4,8 +4,6 @@ interface ProcessEnv {
     [key: string]: string | undefined;
 }
 
-console.log(port);
-
 export const {
     PORT: port,
     JWT_SECRET: jwtSecret,
@@ -15,3 +13,5 @@ export const {
     PG_PASSWORD: pgPassword,
     PG_PORT: pgPort,
 }: ProcessEnv = process.env;
+
+console.log(port);
