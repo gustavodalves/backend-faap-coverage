@@ -15,10 +15,14 @@ class BotService {
                     },
                     {
                         id: 2,
-                        message: 'Digite 2 para enviar uma mensagem para nossos atendentes'
+                        message: 'Digite 2 para enviar uma mensagem'
                     },
                     {
                         id: 3,
+                        message: 'Digite 3 para consultar as perguntas mais frequentes'
+                    },
+                    {
+                        id: 4,
                         message: 'Digite qualquer tecla para encerrar nossa conversa'
                     }
                 ],
@@ -230,6 +234,131 @@ class BotService {
             }
         }
 
+        else if(botMessage[0] === 3) {
+            if(botMessage[1] === 1) {
+                if(botMessage.length === 2) {
+                    return {
+                        message: 'Seguro:',
+                        options: [{
+                            id: 1,
+                            message: 'Seguro de carro',
+                        },
+                        {
+                            id: 2,
+                            message: 'Seguro de vida',
+                        },
+                        {
+                            id: 3,
+                            message: 'Seguro avançado: R$ 300,00 / mês',
+                        },]
+                    };
+                }
+                if(botMessage[2] === 1) {
+                    return {
+                        message: 'Precos:',
+                        options: [{
+                            id: 1,
+                            message: 'Seguro simples: R$ 100,00 / mês',
+                        },
+                        {
+                            id: 2,
+                            message: 'Seguro médio: R$ 200,00 / mês',
+                        },
+                        {
+                            id: 3,
+                            message: 'Seguro avançado: R$ 300,00 / mês',
+                        },
+                        {
+                            id: 0,
+                            message: 'Tchau :)'
+                        }]
+                    };
+                }
+
+                if(botMessage[2] === 1) {
+                    return {
+                        message: 'Planos:',
+                        options: [{
+                            id: 1,
+                            message: 'Seguro simples: cobre batida de carro com um sinistro de R$ 2.000,00',
+                        },
+                        {
+                            id: 2,
+                            message: 'Seguro médio: cobre batida de carro e roubo com um sinistro de R$ 1.000,00',
+                        },
+                        {
+                            id: 3,
+                            message: 'Seguro médio: cobre batida de carro e roubo com um sinistro de R$ 100,00',
+                        }, {
+                            id: 0,
+                            message: 'Tchau :)'
+                        }]
+                    };
+                }
+            }
+            if(botMessage[1] === 1) {
+
+                if(botMessage[2] === 1) {
+                    return {
+                        message: 'Precos:',
+                        options: [{
+                            id: 1,
+                            message: 'Seguro simples: R$ 100,00 / mês',
+                        },
+                        {
+                            id: 2,
+                            message: 'Seguro médio: R$ 200,00 / mês',
+                        },
+                        {
+                            id: 3,
+                            message: 'Seguro avançado: R$ 300,00 / mês',
+                        }, {
+                            id: 0,
+                            message: 'Tchau :)'
+                        }]
+                    };
+                }
+
+                if(botMessage[2] === 2) {
+                    return {
+                        message: 'Precos:',
+                        options: [{
+                            id: 1,
+                            message: 'Seguro simples: 300% do valor arrecadado',
+                        },
+                        {
+                            id: 2,
+                            message: 'Seguro médio: 700% do valor arrecadado',
+                        },
+                        {
+                            id: 3,
+                            message: 'Seguro avançado: 1200% do valor arrecadado',
+                        }, {
+                            id: 0,
+                            message: 'Tchau :)'
+                        }]
+                    };
+                }
+
+            }
+            if(botMessage.length === 1) {
+                return {
+                    message: 'Perguntas mais feitas',
+                    options: [
+                        {
+                            id: 1,
+                            message: 'Digite 1 para saber sobre os preços dos principais seguros',
+                        },
+                        {
+                            id: 2,
+                            message: 'Digite 2 para saber os planos dos nossos principais seguros',
+                        },
+
+                    ]
+                };
+            }
+
+        }
         else {
             return {
                 message: 'Tchau :)'
