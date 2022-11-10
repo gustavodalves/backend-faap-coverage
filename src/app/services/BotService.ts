@@ -235,24 +235,40 @@ class BotService {
         }
 
         else if(botMessage[0] === 3) {
-            if(botMessage[1] === 1) {
-                if(botMessage.length === 2) {
-                    return {
-                        message: 'Seguro:',
-                        options: [{
+            if(botMessage.length === 1) {
+                return {
+                    message: 'Perguntas mais feitas',
+                    options: [
+                        {
                             id: 1,
-                            message: 'Seguro de carro',
+                            message: 'Digite 1 para saber sobre os preços dos principais seguros',
                         },
                         {
                             id: 2,
-                            message: 'Seguro de vida',
+                            message: 'Digite 2 para saber os planos dos nossos principais seguros',
                         },
-                        {
-                            id: 3,
-                            message: 'Seguro avançado: R$ 300,00 / mês',
-                        },]
-                    };
-                }
+
+                    ]
+                };
+            }
+            else if(botMessage.length === 2) {
+                return {
+                    message: 'Seguro:',
+                    options: [{
+                        id: 1,
+                        message: 'Seguro de carro',
+                    },
+                    {
+                        id: 2,
+                        message: 'Seguro de vida',
+                    },
+                    {
+                        id: 3,
+                        message: 'Seguro avançado: R$ 300,00 / mês',
+                    },]
+                };
+            }
+            else if(botMessage[1] === 1) {
                 if(botMessage[2] === 1) {
                     return {
                         message: 'Precos:',
@@ -273,9 +289,7 @@ class BotService {
                             message: 'Tchau :)'
                         }]
                     };
-                }
-
-                if(botMessage[2] === 1) {
+                } else if(botMessage[2] === 2) {
                     return {
                         message: 'Planos:',
                         options: [{
@@ -295,8 +309,7 @@ class BotService {
                         }]
                     };
                 }
-            }
-            if(botMessage[1] === 1) {
+            } else if(botMessage[1] === 2) {
 
                 if(botMessage[2] === 1) {
                     return {
@@ -341,22 +354,6 @@ class BotService {
                 }
 
             }
-            if(botMessage.length === 1) {
-                return {
-                    message: 'Perguntas mais feitas',
-                    options: [
-                        {
-                            id: 1,
-                            message: 'Digite 1 para saber sobre os preços dos principais seguros',
-                        },
-                        {
-                            id: 2,
-                            message: 'Digite 2 para saber os planos dos nossos principais seguros',
-                        },
-
-                    ]
-                };
-            }
 
         }
         else {
@@ -364,6 +361,10 @@ class BotService {
                 message: 'Tchau :)'
             };
         }
+
+        return {
+            message: 'Tchau :)'
+        };
 
         throw new BadRequestError('');
     }
