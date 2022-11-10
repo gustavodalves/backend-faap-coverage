@@ -256,15 +256,11 @@ class BotService {
                     message: 'Seguro:',
                     options: [{
                         id: 1,
-                        message: 'Seguro de carro',
+                        message: 'Digite 1 para saber sobre Seguro de carro',
                     },
                     {
                         id: 2,
-                        message: 'Seguro de vida',
-                    },
-                    {
-                        id: 3,
-                        message: 'Seguro avançado: R$ 300,00 / mês',
+                        message: 'Digite 2 para saber sobre Seguro de vida',
                     },]
                 };
             }
