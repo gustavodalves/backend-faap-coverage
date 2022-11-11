@@ -9,9 +9,6 @@ export const AppDataSource = new DataSource({
     username: pgUsername,
     password: pgPassword,
     database: pgDatabase,
-    ssl: {
-        rejectUnauthorized: false,
-    },
     entities: ['src/app/models/*.ts', 'dist/app/models/*.js'],
     migrations: ['src/database/migrations/*.ts', 'dist/database/migrations/*.js'],
 });

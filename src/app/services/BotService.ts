@@ -290,16 +290,17 @@ class BotService {
                         message: 'Planos:',
                         options: [{
                             id: 1,
-                            message: 'Seguro simples: cobre batida de carro com um sinistro de R$ 2.000,00',
+                            message: 'Seguro simples: R$ 300,00 / mês',
                         },
                         {
                             id: 2,
-                            message: 'Seguro médio: cobre batida de carro e roubo com um sinistro de R$ 1.000,00',
+                            message: 'Seguro médio: R$ 700,00 / mês',
                         },
                         {
                             id: 3,
-                            message: 'Seguro médio: cobre batida de carro e roubo com um sinistro de R$ 100,00',
-                        }, {
+                            message: 'Seguro avançado: R$ 1200,00 / mês',
+                        },
+                        {
                             id: 0,
                             message: 'Tchau :)'
                         }]
@@ -312,15 +313,15 @@ class BotService {
                         message: 'Precos:',
                         options: [{
                             id: 1,
-                            message: 'Seguro simples: R$ 100,00 / mês',
+                            message: 'Seguro simples cobre batida de carro com um sinistro de R$ 4.000,00',
                         },
                         {
                             id: 2,
-                            message: 'Seguro médio: R$ 200,00 / mês',
+                            message: 'Seguro médio cobre batida de carro com um sinistro de R$ 2.000,00',
                         },
                         {
-                            id: 3,
-                            message: 'Seguro avançado: R$ 300,00 / mês',
+                            id: 1,
+                            message: 'Seguro avançado cobre batida e roubo de carro com um sinistro de R$ 1.000,00',
                         }, {
                             id: 0,
                             message: 'Tchau :)'
