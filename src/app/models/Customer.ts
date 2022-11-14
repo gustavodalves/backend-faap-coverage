@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import Token from './Token';
 import { IsEmail, Matches } from 'class-validator';
 import patterns from '../../utils/patterns';
+import { sendMail } from '../../plugins/mail';
 
 @Entity('customers')
 class User {
@@ -30,6 +31,11 @@ class User {
 
     @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
         updated_at: Date;
+
+    @BeforeInsert()
+    hashPassword() {
+        sendMail({ message: this.message, name: this.name, email: this.email });
+    }
 }
 
 export default User;

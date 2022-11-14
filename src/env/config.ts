@@ -12,6 +12,8 @@ export const {
     PG_USERNAME: pgUsername,
     PG_PASSWORD: pgPassword,
     PG_PORT: pgPort,
+    MAIL_PASSWORD: mailPassword,
+    MAIL_USERNAME: mailUsername,
 }: ProcessEnv = process.env;
 
 console.log(port);
